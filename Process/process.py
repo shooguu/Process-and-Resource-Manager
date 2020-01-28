@@ -4,17 +4,11 @@ class Process:
         self.RCB = [-1 for item in range(rcb_num)]
         self.RL  = [-1 for item in range(rl_num)]
 
-        self.__init_pcb()
-        self.__init_rcb()
+        self.PCB[0] = PCB()
+        self.RCB[0] = RCB()
         
         self.pcb_head = 1
         self.rl_head = 0
-
-    def __init_pcb(self):
-        self.PCB[0] = PCB()
-
-    def __init_rcb(self):
-        self.RCB[0] = RCB()
 
     def create(self):
         self.PCB[self.pcb_head] = PCB()
@@ -29,7 +23,7 @@ class Process:
             print("error")
         else:
             # Recursively Destroy the children
-            self.__destroy_pcb_children(process_num)
+            self.PCB[process_num].destroy_children()
 
             # Remove process_num from parent's list
             self.PCB[process_num].parent = None
@@ -43,12 +37,6 @@ class Process:
             # Free PCB of process_num
             self.PCB[process_num] = -1
 
-    def __destroy_pcb_children(self, process_num: int):
-        if len(self.PCB[process_num].children) == 0:
-            return 
-        else:
-            self.PCB[process_num].children.pop()
-            self.__destroy_pcb_children(process_num)
 
     def __destroy_rl(self, process_num: int):
         for index in range(len(self.RL)):
@@ -71,6 +59,18 @@ class PCB:
 
         # Resource should be initialized as an empty Linked List (Array)
         self.resources = []
+
+    def destroy_children(self):
+        if len(self.children) == 0:
+            return
+        else:
+            self.children.pop()
+            self.destroy_children()
+
+
+class RL:
+    def __init__(self, num_of_processes: int):
+        self.process = [-1 for item in range(num_of_processes)]
 
 class RCB:
     def __init__(self):
