@@ -1,18 +1,18 @@
 class PCB:
-    def __init__(self, state=1, parent=None, children=[], resouce=[], priority=0):
+    def __init__(self):
         # 1 - Ready State, 0 - Blocked State
-        self._state = state
+        self._state = 1
 
         # Parent should be initialized as None
-        self._parent = parent
+        self._parent = None
 
         # Child should be initialized as an empty Linked List (Array)
-        self._children = children
+        self._children = []
 
         # Resource should be initialized as an empty Linked List (Array)
-        self._resources = resouce
+        self._resources = []
 
-        self._priority = priority
+        self._priority = 0
         
 
     def set_state_ready(self) -> None:
@@ -78,6 +78,18 @@ class PCB:
         Returns the current priorty value
         '''
         return self._priority
+
+    def add_resource(self, resource: int) -> None:
+        '''
+        Appends the resouce with the given resource value
+        '''
+        self._resources.append(resource)
+
+    def get_resource(self) -> int:
+        '''
+        Returns the resouce list
+        '''
+        return self._resources
 
 if __name__ == "__main__":
     p = PCB()
