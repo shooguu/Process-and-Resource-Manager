@@ -1,7 +1,7 @@
 class PCB:
     def __init__(self):
         # 1 - Ready State, 0 - Blocked State
-        self._state = 1
+        self._state = -1
 
         # Parent should be initialized as None
         self._parent = None
