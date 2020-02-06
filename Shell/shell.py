@@ -16,7 +16,7 @@ class Shell:
                 elif user_input[0].lower() == "to" and self.process != None:
                     print("timeout")
                     self.process.timeout()
-                elif user_input[0].lower() == "in" and self.process == None:
+                elif user_input[0].lower() == "in":
                     print("init")
                     self.process = Process()
                 ################    DEBUG   ##################

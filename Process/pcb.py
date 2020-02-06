@@ -56,16 +56,7 @@ class PCB:
         Returns the children
         '''
         return self._children
-
-    def destroy_children(self):
-        '''
-        Recursively destroys all the children
-        '''
-        if len(self._children) == 0:
-            return
-        else:
-            self._children.pop()
-            self.destroy_children()
+ 
 
     def set_priority_value(self, priority_value: int):
         '''

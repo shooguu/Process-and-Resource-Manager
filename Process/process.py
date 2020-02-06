@@ -9,11 +9,9 @@ class Process:
 
         self.PCB = [-1 for item in range(pcb_num)]
         self.RCB = [RCB() for item in range(rcb_num)]
-        # self.RL  = [-1 for item in range(rl_num)]
         self.RL = [0]
 
         self.PCB[0] = PCB()
-        # self.RCB[0] = RCB()
 
         self.pcb_head = 1
         self.rl_head = 0
@@ -25,26 +23,23 @@ class Process:
         self.PCB[self.pcb_head] = PCB()
         self.PCB[self.running_process].add_children(self.pcb_head)
         self.PCB[self.pcb_head].set_parent(self.running_process)
-        # self.RL[self.rl_head] = self.pcb_head
         self.RL.append(self.pcb_head)
         self.rl_head += 1
         print(f"process {self.pcb_head} created")
-        self.pcb_head = self.__next_open_process(0)
+        self.pcb_head = self.__next_open_process()
         
-
 
     def destroy(self, process_num: int):
 
-        if self.pcb_head <= process_num or process_num == 0:
+        if self.PCB[process_num] == -1:
             print("error")
         else:
-            self.PCB[process_num].destroy_children()
-            self.PCB[process_num].parent = None
-            # self.__destroy_rl(process_num)
-            self.PCB[process_num].resources = []
-            self.PCB[process_num] = -1
+            process_destroyed = self.__destroy_pcb_child(process_num)
+            if process_num > 0:
+                self.PCB[process_num] = -1
+                process_destroyed += 1
             self.pcb_head = self.__next_open_process()
-            print(f"{num_of_processes} processes destroyed")
+            print(f"{process_destroyed} processes destroyed")
 
 
     def request(self, r: int):
@@ -58,7 +53,7 @@ class Process:
                 self.RL.pop()
                 self.RCB[r].add_to_waitlist(self.running_process)
                 print(f"process {self.running_process} blocked")
-        else: ## DEBUG
+        else: ###########   DEBUG   ###############
             print(f"DEBUG (request): Requesting a process when current process is {self.running_process}")
 
 
@@ -66,12 +61,25 @@ class Process:
 
         head = self.RL.pop(0)
         self.RL.append(head)
+        self.running_process = self.RL[0]
         self.scheduler()
 
 
     def scheduler(self):
 
         print(f"process {self.RL[0]} running")
+
+
+    def __destroy_pcb_child(self, process_num: int):
+
+        children = self.PCB[process_num].get_children()[::]
+        num_of_processes = 0
+        for child in children:
+            num_of_processes += 1
+            if self.PCB[child].get_children() != []:
+                children.extend(self.PCB[child].get_children())
+            self.PCB[child] = -1
+        return num_of_processes
 
 
     def __destroy_rl(self, process_num: int):
@@ -81,7 +89,7 @@ class Process:
                 return
 
 
-    def __next_open_process(self, process_num: int) -> None:
+    def __next_open_process(self) -> None:
         '''
         This find the next available process number
         '''
@@ -93,11 +101,6 @@ class Process:
         print("All 16 processes are currently in use")
         return -1
 
-
-
-class RL:
-    def __init__(self, process_num: int):
-        self.process = process_num
 
 
 if __name__ == "__main__":
