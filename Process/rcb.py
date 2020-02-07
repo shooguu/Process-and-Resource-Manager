@@ -1,10 +1,20 @@
 class RCB:
-    def __init__(self):
+    def __init__(self, units: int):
         # 1 - Free, 0 - Allocated
-        self._state = 1
+        self._state = self._init_unit(units)
 
         # Waitlist should be initialized as an empty Linked List (Array)
         self._waitlist = []
+
+        self.inventory = 0
+
+    def _init_unit(self, unit: int):
+        if unit == 0 or unit == 1:
+            return 1
+        elif unit == 2:
+            return 2
+        else:
+            return 3
 
     def set_state_free(self) -> None:
         '''
@@ -24,6 +34,10 @@ class RCB:
         '''
         return self._state
 
+    def set_state(self, s: int) -> None:
+
+        self._state = s
+
     def add_to_waitlist(self, process_num: int) -> None:
         ''' 
         Adds a process number to the waitlist
@@ -35,3 +49,9 @@ class RCB:
         Returns the waitlist
         '''
         return self._waitlist
+
+    def remove_from_waitlist(self, r: int) -> None:
+        '''
+        Removes item from a the waitlist
+        '''
+        self._waitlist.pop(self._waitlist.index(r))

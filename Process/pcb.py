@@ -56,15 +56,14 @@ class PCB:
         Returns the children
         '''
         return self._children
- 
 
-    def set_priority_value(self, priority_value: int):
+    def set_priority_value(self, p: int):
         '''
-        Sets the current priority value with the given priority value
+        Sets the priority value to the given value
         '''
-        self._priority = priority_value
+        self._priority = p
 
-    def get_priorty_value(self) -> int:
+    def get_priority_value(self) -> int:
         '''
         Returns the current priorty value
         '''
@@ -81,6 +80,14 @@ class PCB:
         Returns the resouce list
         '''
         return self._resources
+
+    def remove_from_resource(self, r: int) -> None:
+
+        try:
+            self._resources.pop(self._resources.index(r))
+            return 1
+        except ValueError:
+            return 0
 
 if __name__ == "__main__":
     p = PCB()
